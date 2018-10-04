@@ -1,33 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-<script>
-    function getA0() {
-        fetch('http://192.168.43.242/a0')
-            .then(function (response){
-                return response.json();
-            })
-            .then(function (data){
-                console.log(data.A0);
+    <link href="c3.css" rel="stylesheet">
+    <script src="d3-5.4.0.min.js"></script>
+    <script src="c3.min.js"></script>
+    <script>
+
+        var A0s;
+        var chart;
+
+        function getA0() {
+            fetch('http://192.168.43.242/a0')
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    console.log(data.A0);
+                });
+        }
+
+
+        function callBlink() {
+            fetch('http://192.168.43.242/blink')
+                .then(function (data) {
+                    console.log('ok');
+                });
+        }
+
+        window.onload = () => {
+            A0s = ['A0'];
+
+            chart = c3.generate({
+                bindto: '#chart',
+                data: {
+                    columns: [
+                        A0s
+                    ]
+                }
             });
-    }
+        };
 
-
-    function callBlink() {
-        fetch('http://192.168.43.242/blink')
-            .then(function (data){
-                console.log('ok');
-    });
-}
-</script>
+    </script>
 </head>
+
 <body>
     <input type="button" value="A0" onclick="getA0()">
     <input type="button" value="Blink" onclick="callBlink()">
-    
+    <input type="button" value="Update Chart" onclick="updateChart()">
+    <div id="chart"></div>
+
+
+
 </body>
+
 </html>
