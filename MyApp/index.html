@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="c3.css" rel="stylesheet">
+    <script src="d3-5.4.0.min.js"></script>
+    <script src="c3.min.js"></script>
+    <script>
+
+        var A0s;
+        var chart;
+
+        function getIp() {
+            return document.getElementById("ip").value;
+        }
+
+        function autoChart(){
+
+            setInterval(
+                () => {
+                    updateChart();
+                },
+            1000);
+        }
+
+        function updateChart() {
+            var ip = getIp();
+            fetch( ip )
+            .then(function (response){
+                return response.json();
+            })
+            .then(function (data){
+                console.log(data.variables.Photoresistor);
+                A0s = A0s.concat(data.variables.Photoresistor);
+                chart.load({
+                    columns: [
+                    A0s,
+                    ]
+                });
+            });
+            }
+        
+
+        function getA0() {
+            fetch('https://cloud.arest.io/iche')
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    console.log(data.variables);
+                });
+        }
+
+
+        function callBlink() {
+            fetch('https://cloud.arest.io/iche')
+                .then(function (data) {
+                    console.log('ok');
+                });
+        }
+
+        window.onload = () => {
+            A0s = ['A0'];
+
+            chart = c3.generate({
+                bindto: '#chart',
+                data: {
+                    columns: [
+                        A0s
+                    ]
+                }
+            });
+        };
+
+    </script>
+</head>
+
+<body>
+    <input type="button" value="A0" onclick="getA0()">
+    <input type="button" value="Blink" onclick="callBlink()">
+    <input type="button" value="Update Chart" onclick="updateChart()">
+    <input type="button" value="autoChart" onclick="autoChart()">
+
+    <input type="text" name="" id="ip" value="https://cloud.arest.io/iche">
+    <div id="chart"></div>
+    
+
+    
+
+
+
+</body>
+
+</html>
