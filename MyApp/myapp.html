@@ -29,16 +29,16 @@
 
         function updateChart() {
             var ip = getIp();
-            fetch('http://' + ip + '/a0')
+            fetch( ip )
             .then(function (response){
                 return response.json();
             })
             .then(function (data){
-                console.log(data);
-                A0s = A0s.concat(data.A0);
+                console.log(data.variables.Photoresistor);
+                A0s = A0s.concat(data.variables.Photoresistor);
                 chart.load({
                     columns: [
-                        A0s,
+                    A0s,
                     ]
                 });
             });
@@ -46,18 +46,18 @@
         
 
         function getA0() {
-            fetch('http://192.168.43.242/a0')
+            fetch('https://cloud.arest.io/iche')
                 .then(function (response) {
                     return response.json();
                 })
                 .then(function (data) {
-                    console.log(data.A0);
+                    console.log(data.variables);
                 });
         }
 
 
         function callBlink() {
-            fetch('http://192.168.43.242/blink')
+            fetch('https://cloud.arest.io/iche')
                 .then(function (data) {
                     console.log('ok');
                 });
@@ -85,7 +85,7 @@
     <input type="button" value="Update Chart" onclick="updateChart()">
     <input type="button" value="autoChart" onclick="autoChart()">
 
-    <input type="text" name="" id="ip" value="192.168.43.242">
+    <input type="text" name="" id="ip" value="https://cloud.arest.io/iche">
     <div id="chart"></div>
     
 
